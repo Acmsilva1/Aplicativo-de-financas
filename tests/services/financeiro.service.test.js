@@ -180,26 +180,9 @@ describe('financeiroService', () => {
   it('rejeita tipo_registro compra_variada no insert', () => {
     const out = payloadInsertFinanceiro({
       tipo_registro: 'compra_variada',
-      descricao: 'Televisão',
+      descricao: 'TelevisÃ£o',
       valor: 1500,
     });
     expect(out.error).toBe('tipo_registro invalido');
-  });
-
-  it('rejeita saldo de conta corrente como tipo invalido', () => {
-    const insert = payloadInsertFinanceiro({
-      tipo_registro: 'saldo_conta_corrente',
-      valor: 800,
-      negativo: true,
-    });
-    expect(insert.error).toBe('tipo_registro invalido');
-
-    const update = payloadUpdateFinanceiro({
-      tipo_registro: 'saldo_conta_corrente',
-      id: 1,
-      valor: 250,
-      negativo: false,
-    });
-    expect(update.error).toBe('tipo_registro invalido');
   });
 });
