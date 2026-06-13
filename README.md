@@ -1,14 +1,14 @@
-# Modo Financeiro
+# Minhas Financas
 
-O modo financeiro e uma aplicacao web/PWA com frontend unico em `index.html`, backend em funcoes Node.js e persistencia em banco configuravel.
+Aplicacao web/PWA focada exclusivamente no modo financeiro, com frontend unico em `index.html`, backend serverless em Node.js e persistencia em banco configuravel.
 
-**Documentacao interna:** [`docs/documentacao.md`](docs/documentacao.md)
+**Documentacao oficial:** [`docs/documentacao.md`](docs/documentacao.md)
 
 ## Visao geral
 
 - Frontend central em `index.html`
 - APIs serverless em `api/`
-- Regras de dominio concentradas no financeiro em `features/`
+- Regras de dominio do financeiro em `features/`
 - Cliente de banco compartilhado em `lib/database.js`
 - Monitoramento e rotinas operacionais em `monitoring/`
 
@@ -26,7 +26,7 @@ O modo financeiro e uma aplicacao web/PWA com frontend unico em `index.html`, ba
 ## Estrutura
 
 ```text
-super-app-1/
+Aplicativo-de-financas/
 |-- index.html
 |-- api/
 |-- features/
@@ -68,5 +68,5 @@ Notas:
 ## Observacoes
 
 - O shell ainda e centralizado em `index.html`
-- `financeiro` e o modulo mais sensivel do negocio
+- `financeiro` e o modulo unico do produto
 - O restante do repositorio serve apenas de apoio ao financeiro

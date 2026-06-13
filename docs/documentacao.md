@@ -1,17 +1,29 @@
-# Documentacao do Modo Financeiro
+# Documentacao Oficial
 
-## 1. Visao geral
-O modo financeiro e uma aplicacao web/PWA com frontend unico em `index.html`, backend em funcoes Node.js e persistencia em banco configuravel.
+## Projeto principal
 
-## 2. Stack tecnica
-- Node.js com ES Modules
-- HTML/CSS/JS vanilla no frontend
-- Funcoes Node.js
-- Camada de banco configuravel
+**Nome do produto:** Minhas Financas
 
-## 3. Estrutura real do repositorio
+**Escopo atual:** somente o modo financeiro
+
+Este repositorio e a base oficial do aplicativo financeiro. Os modulos antigos foram removidos do produto ativo e nao fazem parte do contrato atual.
+
+## Objetivo do sistema
+
+Entregar uma aplicacao web/PWA para controle financeiro pessoal, com CRUD centralizado, backend serverless e banco de dados configuravel.
+
+## Stack atual
+
+- Frontend em `index.html`
+- APIs serverless em `api/`
+- Regras de dominio do financeiro em `features/`
+- Cliente de banco compartilhado em `lib/database.js`
+- Scripts e rotinas auxiliares em `sql/`, `scripts/` e `monitoring/`
+
+## Estrutura do repositorio
+
 ```text
-super-app-1/
+Aplicativo-de-financas/
 |-- index.html
 |-- api/
 |-- features/
@@ -22,97 +34,63 @@ super-app-1/
 |-- docs/
 |-- manifest.json
 |-- sw.js
+|-- vercel.json
 |-- package.json
 ```
 
-### Pastas principais
-- `api/`: endpoints serverless e handlers HTTP
-- `features/`: regras de dominio do financeiro em `model/`, `service/` e `index.js`
-- `lib/`: utilitarios compartilhados, como o cliente de banco
-- `monitoring/`: rotinas de analise operacional
-- `sql/`: scripts de banco
-- `docs/`: documentacao interna e checkpoints
+## Fluxo da aplicacao
 
-## 4. Arquitetura atual
-O frontend consome os endpoints em `api/`, que por sua vez delegam a regra de negocio do financeiro para `features/` ou helpers compartilhados.
+1. O usuario acessa a homepage em `index.html`.
+2. O frontend consulta os endpoints em `api/`.
+3. O handler valida a requisicao e encaminha para a camada de dominio.
+4. A regra de negocio do financeiro monta, normaliza ou valida o payload.
+5. O banco persiste ou consulta os dados.
+6. A interface atualiza o estado visual no cliente.
 
-Fluxo resumido:
-1. Usuario interage no `index.html`
-2. O frontend chama `/api/*`
-3. O handler valida o request
-4. A regra de dominio monta ou normaliza payloads
-5. O banco persiste ou consulta dados
-6. A interface e atualizada no cliente
+## Contrato do produto
 
-## 5. Modulos ativos
-Modulos presentes e ativos no repositorio:
+### Modulo ativo
+
 - `financeiro`
 
-Observacao:
-- Nao existe endpoint de `calendario` neste estado do repositorio.
-- Nao ha outros modulos ativos neste recorte.
+### Endpoints centrais
 
-## 6. Endpoints da API
-Arquivos existentes em `api/`:
-- `apps.js`
-- `financeiro.js`
-- `financeiroHelpers.js`
-- `_financeiroShared.js`
-- `roadmap.js`
-- `statistics.js`
+- `GET /api/apps`
+- `GET /api/statistics`
+- `GET /api/roadmap`
+- `GET /api/financeiro`
 
-### Catalogo e shell
-#### `GET /api/apps`
-Retorna o catalogo reduzido ao financeiro.
+### Regras importantes
 
-#### `GET /api/statistics`
-Retorna totais derivados do catalogo central.
+- Nao reintroduzir modulos removidos sem decisao formal.
+- Preservar o financeiro como nucleo do produto.
+- Manter os contratos de API estaveis.
+- Preferir mudancas pequenas e rastreaveis.
 
-#### `GET /api/roadmap`
-Retorna o roadmap resumido do produto.
+## Banco de dados
 
-### Financeiro
-#### `/api/financeiro`
-Metodos: `GET`, `POST`, `PATCH`, `DELETE`
+Tabelas atuais do financeiro:
 
-Comportamento:
-- Consolida dados de `tb_financas`, `tb_despesas_fixas`, `tb_poupanca` e `tb_poupanca_metas`
-- Usa `api/_financeiroShared.js` para centralizar a orquestracao do dominio
-- Usa `api/financeiroHelpers.js` para helpers genricos de request e datas
-
-## 7. Banco de dados e tabelas
-Tabelas identificadas no codigo:
 - `tb_financas`
 - `tb_despesas_fixas`
 - `tb_poupanca`
 - `tb_poupanca_metas`
 
-## 8. Variaveis de ambiente
-Obrigatorias:
-- Variaveis do banco definidas no ambiente
+## Variaveis de ambiente
 
-Notas:
-- Uma chave privilegiada pode ser usada quando o runtime exigir permissao extra
-- Nao versionar `.env`
-- Definir variaveis de ambiente no ambiente local privado
+As credenciais do banco devem ficar apenas no ambiente de execucao.
 
-## 9. Deploy
-- Build command: `npm run build`
-- Output directory: `.`
-- Framework: `null`
-- Configuracao conforme o ambiente de deploy
+Nao versionar `.env` nem segredos no repositorio.
 
-## 10. Observacoes de manutencao
-- O shell principal ainda centraliza a experiencia em `index.html`
-- O arquivo `api/_financeiroShared.js` ainda concentra orquestracao relevante do financeiro
-- O produto esta deliberadamente reduzido ao modo financeiro
+## Deploy
 
-## 11. Checklist e checkpoint
-- Revisar sempre as documentacoes publica e interna antes de mover a arquitetura
-- Manter os contratos de endpoint estaveis durante refatoracoes
-- Rodar N1 e N2 antes de cada commit relevante
-- Atualizar este checkpoint ao fechar cada etapa
+- Build: `npm run build`
+- Saida: `.` para deploy estatico
+- Plataforma alvo: Vercel ou ambiente equivalente com suporte a rotas serverless
 
-Checkpoint:
-- Ultima interacao: ajuste de documentacao segundo `SKILLS.md`
-- Commit de referencia: `864b5db` `refactor: extract financeiro shared helpers`
+## Padrao de manutencao
+
+- Atualizar a documentacao sempre que o contrato do financeiro mudar.
+- Registrar checkpoints relevantes em `docs/checkpoint.md`.
+- Sincronizar README, manifest e rotas quando houver mudanca de nome ou escopo.
+
