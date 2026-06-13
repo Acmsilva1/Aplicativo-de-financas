@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "SUPERAPP",
-  "short_name": "SUPERAPP",
+  "name": "Minhas Finanças",
+  "short_name": "Minhas Finanças",
   "description": "Plataforma unificada de microservicos e aplicacoes praticas",
   "start_url": "/index.html",
   "scope": "/",
