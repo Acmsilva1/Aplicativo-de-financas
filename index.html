@@ -45,6 +45,7 @@
             font-family: 'Space Grotesk', sans-serif;
             background: url('/logo%20home.png') center center / cover no-repeat fixed;
             background-color: #030712;
+            background-blend-mode: normal;
             color: var(--text-dark);
             line-height: 1.6;
             position: relative;
@@ -56,9 +57,10 @@
             z-index: -1;
             pointer-events: none;
             background:
-                linear-gradient(115deg, rgba(6, 182, 212, 0.18), transparent 32%),
-                linear-gradient(290deg, rgba(37, 99, 235, 0.22), transparent 36%),
-                rgba(2, 6, 23, 0.24);
+                radial-gradient(circle at 50% 20%, rgba(56, 189, 248, 0.10), transparent 34%),
+                linear-gradient(115deg, rgba(6, 182, 212, 0.10), transparent 34%),
+                linear-gradient(290deg, rgba(37, 99, 235, 0.12), transparent 38%);
+            opacity: 0.58;
             animation: auroraShift 14s ease-in-out infinite alternate;
         }
         body::after {
@@ -68,10 +70,11 @@
             z-index: -1;
             pointer-events: none;
             background-image:
-                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
             background-size: 28px 28px, 28px 28px;
-            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.6) 0%, transparent 78%);
+            opacity: 0.18;
+            mask-image: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.55) 0%, transparent 78%);
         }
         @keyframes auroraShift {
             from { transform: translate3d(-1.5%, 0, 0) scale(1.02); opacity: 0.7; }
@@ -155,17 +158,19 @@
         }
         [data-theme="light"] body::before {
             background:
-                linear-gradient(115deg, rgba(14, 165, 233, 0.18), transparent 32%),
-                linear-gradient(290deg, rgba(59, 130, 246, 0.16), transparent 36%),
-                rgba(255, 255, 255, 0.14);
+                radial-gradient(circle at 50% 20%, rgba(14, 165, 233, 0.12), transparent 34%),
+                linear-gradient(115deg, rgba(14, 165, 233, 0.10), transparent 34%),
+                linear-gradient(290deg, rgba(59, 130, 246, 0.10), transparent 38%);
+            opacity: 0.46;
         }
         [data-theme="light"] body::after {
             background-image:
-                linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+            opacity: 0.14;
         }
         [data-theme="light"] header {
-            background: linear-gradient(100deg, rgba(239, 246, 255, 0.94), rgba(226, 238, 255, 0.95));
+            background: linear-gradient(100deg, rgba(239, 246, 255, 0.84), rgba(226, 238, 255, 0.88));
             border-bottom-color: rgba(14, 116, 144, 0.22);
             color: #0f172a;
         }
@@ -435,7 +440,7 @@
 
         /* HEADER */
         header {
-            background: linear-gradient(100deg, rgba(8, 23, 48, 0.94), rgba(5, 14, 30, 0.95));
+            background: linear-gradient(100deg, rgba(8, 23, 48, 0.76), rgba(5, 14, 30, 0.82));
             border-bottom: 1px solid rgba(56, 189, 248, 0.28);
             backdrop-filter: blur(14px);
             color: white;
