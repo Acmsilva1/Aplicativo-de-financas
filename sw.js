@@ -1,14 +1,15 @@
 /**
- * Service Worker - SUPERAPP PWA
+ * Service Worker - Minhas Financas PWA
  * Incrementar CACHE_VERSION a cada deploy/commit para invalidar cache e forcar atualizacao.
  */
-const CACHE_VERSION = '2026-05-11-mt-tabs-scroll';
+const CACHE_VERSION = '2026-06-13-finance-icon';
 const CACHE_NAME = 'superapp-' + CACHE_VERSION;
 
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/icone-financeiro.png',
   '/icon-192.png',
   '/icon-512.png'
 ];
