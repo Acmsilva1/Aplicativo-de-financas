@@ -81,7 +81,7 @@
         }
 
         :root {
-            /* Cores SUPERAPP */
+            /* Cores Minhas Financas */
             --primary: #38bdf8;
             --primary-dark: #0ea5e9;
             --primary-light: #7dd3fc;
@@ -1262,7 +1262,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Módulo Fluxograma (escopo isolado; tema escuro não afeta o body do SUPERAPP) */
+        /* Módulo legado isolado (escopo interno do editor) */
         .window-content.fluxograma-window-content {
             padding: 0 !important;
             overflow: hidden !important;
@@ -5212,7 +5212,7 @@
 
     <script>
         // ============================================
-        // SUPERAPP - Sistema de Gerenciamento de Apps
+        // Minhas Financas - Sistema de Gestao Financeira
         // ============================================
         (function initDarkMode() {
             const stored = localStorage.getItem('superapp-dark-mode');
@@ -5464,7 +5464,7 @@
             }
             renderApps() {
                 const container = document.getElementById('appsContainer');
-                const apps = this.apps.filter((app) => !this.isRemovedLegacyApp(app?.id));
+                const apps = this.apps.filter((app) => String(app?.id || '').toLowerCase() === 'financeiro');
 
                 if (apps.length === 0) {
                     container.innerHTML = `
@@ -5498,25 +5498,14 @@
                 this.refreshAppApiStatuses();
             }
 
-            isRemovedLegacyApp(appId) {
-                const id = String(appId || '').toLowerCase();
-                return id === 'vendas' || id === 'saude';
-            }
-
             getAppHealthUrl(app) {
                 const explicit = String(app?.health_path || '').trim();
                 if (explicit) return explicit;
-                const map = {
-                    financeiro: '/api/financeiro?health=1',
-                    lista_compras: '/api/lista-compras?health=1',
-                    fluxograma: '/api/fluxograma?health=1',
-                    missoes_treino: '/api/missoes-treino?health=1',
-                };
-                return map[String(app?.id || '')] || '';
+                return String(app?.id || '').toLowerCase() === 'financeiro' ? '/api/financeiro?health=1' : '';
             }
 
             async refreshAppApiStatuses() {
-                const checks = this.apps.filter((app) => !this.isRemovedLegacyApp(app?.id)).map(async (app) => {
+                const checks = this.apps.filter((app) => String(app?.id || '').toLowerCase() === 'financeiro').map(async (app) => {
                     const appId = String(app.id || '');
                     const badge = Array.from(document.querySelectorAll('[data-app-status-id]'))
                         .find((node) => node.dataset.appStatusId === appId);
@@ -5563,18 +5552,12 @@
             getAppTone(app, idx = 0) {
                 const id = String(app?.id || '').toLowerCase();
                 if (id.includes('fin') || id.includes('despesa')) return 'warm';
-                if (id.includes('treino')) return 'growth';
-                if (id.includes('flux')) return 'energy';
-                return ['cool', 'growth', 'warm', 'energy'][idx % 4];
+                return 'warm';
             }
 
             getAppCardIconSrc(app) {
                 const id = String(app?.id || '').toLowerCase();
-                if (id.includes('fin') || id.includes('despesa')) return '/icone-financeiro.png';
-                if (id.includes('flux')) return '/icone%20fluxograma.png';
-                if (id.includes('lista') || id.includes('compra')) return '/icone%20lista%20de%20compras.png';
-                if (id.includes('treino')) return '/icone%20treino.png';
-                return '/icon-192.png';
+                return id.includes('fin') || id.includes('despesa') ? '/icone-financeiro.png' : '/icon-192.png';
             }
 
             getMotionHelpers() {
@@ -5602,7 +5585,7 @@
 
             getAppPreviewDescription(app) {
                 const text = String(app?.description || '').replace(/\s+/g, ' ').trim();
-                if (!text) return 'Modulo pronto para uso no ecossistema do SUPERAPP.';
+                if (!text) return 'Modulo pronto para uso no ecossistema do financeiro.';
                 if (text.length <= 104) return text;
                 return `${text.slice(0, 101).trim()}...`;
             }
@@ -5904,8 +5887,8 @@
             }
 
             launchApp(appId) {
-                if (this.isRemovedLegacyApp(appId)) {
-                    console.warn(`O modulo legado "${appId}" foi removido do shell atual.`);
+                if (String(appId || '').toLowerCase() !== 'financeiro') {
+                    console.warn(`O modulo "${appId}" nao faz parte da versao atual.`);
                     return;
                 }
                 if (this.openWindows.has(appId)) {
@@ -5973,54 +5956,16 @@
                 if (contentEl && typeof contentEl._cleanup === 'function') {
                     contentEl._cleanup();
                 }
-                const prevRoot = contentEl.querySelector('#fluxograma-root');
-                if (prevRoot && prevRoot._fluxOnResize) {
-                    window.removeEventListener('resize', prevRoot._fluxOnResize);
-                }
                 const previousScrollTop = contentEl.scrollTop || 0;
-                contentEl.classList.remove('fluxograma-window-content');
                 contentEl.innerHTML = '<div class="app-loading"><i class="fas fa-spinner spinner"></i> Carregando...</div>';
-                if (appId === 'fluxograma') {
-                    contentEl.classList.add('fluxograma-window-content');
-                    await this.renderFluxogramaContent(contentEl);
-                    const savedScroll = Number(this.uiState.windowScrolls?.[appId]);
-                    const scrollToRestore = Number.isFinite(savedScroll) ? savedScroll : previousScrollTop;
-                    this.rememberWindowScroll(appId, scrollToRestore);
-                    this.restoreWindowScroll(appId, contentEl);
-                    return;
-                }
-                if (appId === 'missoes_treino') {
-                    try {
-                        // Query de versao: forca novo modulo no PWA; o servidor usa o mesmo path.
-                        const mod = await import('./features/missoes_treino/index.js?v=2026-05-11-mt-tabs');
-                        mod.renderMissoesTreinoContent(contentEl);
-                        // Scroll antigo (antes das abas) deixava header/tabs fora do ecra no mobile.
-                        if (this.uiState.windowScrolls && appId in this.uiState.windowScrolls) {
-                            delete this.uiState.windowScrolls[appId];
-                            this.saveUiState();
-                        }
-                        this.rememberWindowScroll(appId, 0);
-                        requestAnimationFrame(() => {
-                            contentEl.scrollTop = 0;
-                        });
-                    } catch (err) {
-                        console.error(err);
-                        contentEl.innerHTML = '<div class="app-error"><i class="fas fa-exclamation-triangle"></i> Nao foi possivel carregar Missoes de Treino.</div>';
-                    }
-                    return;
-                }
-                const apiMap = { financeiro: 'financeiro', lista_compras: 'lista-compras' };
-                const path = apiMap[appId];
-                if (!path) return;
+                if (appId !== 'financeiro') return;
                 let mesAno = contentEl.getAttribute('data-mes-ano');
-                if (appId === 'financeiro' && !mesAno) mesAno = this.getMesAnoAtual();
+                if (!mesAno) mesAno = this.getMesAnoAtual();
                 try {
-                    let url = '/api/' + path;
-                    if (appId === 'financeiro') url = '/api/financeiro?bi=1&mes_ano=' + encodeURIComponent(mesAno || this.getMesAnoAtual());
-                    const res = await fetch(url);
+                    const res = await fetch('/api/financeiro?bi=1&mes_ano=' + encodeURIComponent(mesAno || this.getMesAnoAtual()));
                     const data = await this.readApiJsonOrThrow(res, 'Falha ao carregar');
-                    if (appId === 'financeiro') { contentEl.setAttribute('data-mes-ano', data.mes_ano || mesAno); this.renderFinanceiroContent(contentEl, data); }
-                    else if (appId === 'lista_compras') this.renderListaComprasContent(contentEl, data);
+                    contentEl.setAttribute('data-mes-ano', data.mes_ano || mesAno);
+                    this.renderFinanceiroContent(contentEl, data);
                     const savedScroll = Number(this.uiState.windowScrolls?.[appId]);
                     const scrollToRestore = Number.isFinite(savedScroll) ? savedScroll : previousScrollTop;
                     this.rememberWindowScroll(appId, scrollToRestore);
@@ -8083,7 +8028,7 @@
              */
             setApps(apps) {
                 this.apps = Array.isArray(apps)
-                    ? apps.filter((app) => !this.isRemovedLegacyApp(app?.id))
+                    ? apps.filter((app) => String(app?.id || '').toLowerCase() === 'financeiro')
                     : [];
                 this.renderApps();
             }
@@ -8106,7 +8051,7 @@
             }
         }
 
-        // Inicializar SUPERAPP
+        // Inicializar Minhas Financas
         const superApp = new SuperApp();
         window._superappPwaUpdatePending = false;
 
