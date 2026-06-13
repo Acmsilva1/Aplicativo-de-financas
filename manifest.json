@@ -1,0 +1,41 @@
+{
+  "id": "/",
+  "name": "SUPERAPP",
+  "short_name": "SUPERAPP",
+  "description": "Plataforma unificada de microservicos e aplicacoes praticas",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "theme_color": "#2563eb",
+  "background_color": "#0f172a",
+  "lang": "pt-BR",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
