@@ -35,6 +35,8 @@ Aplicativo-de-financas/
 |-- scripts/
 |-- sql/
 |-- docs/
+|-- apk app/
+|-- twa android/
 |-- manifest.json
 |-- sw.js
 |-- package.json
@@ -70,3 +72,4 @@ Notas:
 - O shell ainda e centralizado em `index.html`
 - `financeiro` e o modulo unico do produto
 - O restante do repositorio serve apenas de apoio ao financeiro
+- As rotas de distribuicao Android ficam separadas em `apk app/` e `twa android/`
